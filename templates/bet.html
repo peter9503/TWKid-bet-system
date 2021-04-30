@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type = "text/javascript">  
+	function place_bet_0(gid,wantSide) {
+		$.ajax(
+			{
+				type: "POST",
+				url: "settle_bet",			
+				data: {uid:document.getElementById("uid").value,
+					num:document.getElementById("ticket_left_"+gid).value,				
+					side:wantSide,
+					gid:gid},
+			}
+		).done(
+			function(msg){
+				alert(msg);
+			}
+		);
+	}
+	function place_bet_1(gid,wantSide) {
+		$.ajax(
+			{
+				type: "POST",
+				url: "settle_bet",			
+				data: {uid:document.getElementById("uid").value,
+					num:document.getElementById("ticket_right_"+gid).value,				
+					side:wantSide,
+					gid:gid},
+			}
+		).done(
+			function(msg){
+				alert(msg);
+			}
+		);
+	}
+</script>   
+
+
+
+<body>
+可下注的遊戲列表<p></p>
+<input class="text" value = "{{ uid }}" id = "uid" hidden>
+<form method = "post" action = "{{ url_for('bet') }}" >	
+	{% for game in CurrentGames %}
+        {{ game['title'] }}<br>
+
+        <div style="display:inline; width: 200px">{{ game['p1'] }}</div>
+        <div style="display:inline; width: 100px">當前賠率：{{ game['p1Ratio'] }}</div>
+        <br>
+        <input class="text" id = "ticket_left_{{ game['gid'] }}" value="0" style="display:inline; width: 50px">張
+        <input type="button" value = "下注" onclick="place_bet_0(this.id,'{{ game['p1'] }}')" id = "{{ game['gid'] }}" style="display:inline; width: 50px">
+        <br>
+
+        <div style="display:inline; width: 200px">{{ game['p2'] }}</div>
+        <div style="display:inline; width: 100px">當前賠率：{{ game['p2Ratio'] }}</div>
+        <br>
+        <input class="text" id = "ticket_right_{{ game['gid'] }}" value="0" style="display:inline; width: 50px">張
+        <input type="button" value = "下注" onclick="place_bet_1(this.id,'{{ game['p2'] }}')" id = "{{ game['gid'] }}" style="display:inline; width: 50px">
+        <br><br><br>
+    {% endfor %}
+</form><p>
+
+<form method = "post" action = "{{ url_for('index') }}" >
+	<input type="text" name="uid" value = "{{ uid }}" hidden>
+    <input type="submit" value = "上一頁">
+</form><p>
+
+<form method = "post" action = "{{ url_for('bet') }}" >
+	<input type="text" name="uid" value = "{{ uid }}" hidden>
+    <input type="submit" value = "重新整理">
+</form><p>
+
+</body>
+</html>

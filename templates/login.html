@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<form method="post" action="{{ url_for('index') }}">
+    帳號：<input type="text" name="account"><p>
+	密碼：<input type="text" name="pw"><p>
+	<input type = 'submit' value="登入">
+</form>
+
+<form method="post" action="{{ url_for('manager') }}">
+    帳號：<input type="text" name="account"><p>
+	密碼：<input type="text" name="pw"><p>
+	<input type = 'submit' value="管理員登入">
+</form>
+</body>
+</html>

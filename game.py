@@ -27,6 +27,8 @@ class Game():
 		f.write(json.dumps(gameData))
 		f.close()
 
+		return 'SUCCESS'
+
 
 	def loadAllBetByUid(self, uid):
 		output = []

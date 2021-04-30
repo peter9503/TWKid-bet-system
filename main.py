@@ -118,7 +118,7 @@ def new_account():
 	pw = request.form["pw"]
 	print(ac)
 	print(pw)
-	r = register(title,names)
+	r = register(ac,pw)
 	if r == NAME_USED:
 		return "NAME_USED"
 

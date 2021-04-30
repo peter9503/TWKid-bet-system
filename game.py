@@ -20,7 +20,10 @@ class Game():
 					"state":0}
 
 		# count current gid
-		gid = len(os.listdir("data/games"))
+		try:
+			gid = len(os.listdir("data/games"))
+		except:
+			gid = 0
 
 		# write file
 		f = open("data/games/{}.json".format(gid),"w")
@@ -88,7 +91,7 @@ class Game():
 
 				if data["state"] == 0:
 					self.runningGame[gid] = data
-					
+
 			return
 
 		except:
@@ -96,13 +99,18 @@ class Game():
 
 	def AllGames(self):
 		output = {}
-		allFileList = os.listdir("data/games")
-		for gid in allFileList:
-			f = open("data/games/{}".format(gid))
-			data = json.loads(f.readline())
-			f.close()
-			output[gid] = data
-		return output
+		try:
+			allFileList = os.listdir("data/games")
+			for gid in allFileList:
+				f = open("data/games/{}".format(gid))
+				data = json.loads(f.readline())
+				f.close()
+				output[gid] = data
+			return output
+
+		except:
+			return output
+
 
 	def allRunningGames(self):
 		# return current availabe game

@@ -26,7 +26,12 @@ class Game():
 			gid = 0
 
 		# write file
-		f = open("data/games/{}.json".format(gid),"w")
+		try:
+			f = open("data/games/{}.json".format(gid),"w")
+		except:
+			os.mkdir("data/games")
+			f = open("data/games/{}.json".format(gid),"w")
+
 		f.write(json.dumps(gameData))
 		f.close()
 

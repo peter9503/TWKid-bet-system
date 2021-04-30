@@ -88,7 +88,11 @@ class Game():
 
 				if data["state"] == 0:
 					self.runningGame[gid] = data
-		return
+					
+			return
+
+		except:
+			return
 
 	def AllGames(self):
 		output = {}

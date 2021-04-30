@@ -79,14 +79,15 @@ class Game():
 	def loadAllRunningGames(self):
 		# only load games that are open for betting
 		self.runningGame = {}
-		allFileList = os.listdir("data/games")
-		for gid in allFileList:
-			f = open("data/games/{}".format(gid))
-			data = json.loads(f.readline())
-			f.close()
+		try:
+			allFileList = os.listdir("data/games")
+			for gid in allFileList:
+				f = open("data/games/{}".format(gid))
+				data = json.loads(f.readline())
+				f.close()
 
-			if data["state"] == 0:
-				self.runningGame[gid] = data
+				if data["state"] == 0:
+					self.runningGame[gid] = data
 		return
 
 	def AllGames(self):

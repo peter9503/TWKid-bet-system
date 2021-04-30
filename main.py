@@ -108,8 +108,8 @@ def new_game():
 	names = [request.form["n1"],request.form["n2"]]
 	print(title)
 	print(names)
-	G.newGame(title,names)
-	return ""
+	r = G.newGame(title,names)
+	return r
 
 
 @app.route("/new_account", methods=["POST"])
@@ -128,7 +128,10 @@ def new_account():
 
 @app.route("/manager", methods=["POST"])
 def manager():
-	if request.form['account'] != "manger" and request.form['pw'] != "qwerasdf":
+	print(request.form['account'],request.form['pw'])
+	print(request.form['account'] != "manager")
+	print(request.form['pw'] != "qwerasdf")
+	if request.form['account'] != "manager" or request.form['pw'] != "qwerasdf":
 		return "Fuck off !!!!!"
 
 	allGames = G.AllGames()

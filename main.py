@@ -3,6 +3,8 @@ from game import Game
 from login import _login, register
 from account import readAccountData, bet_ac
 from constant import *
+
+import os
 # Hi
 app = Flask(__name__)
 G = Game()
@@ -160,4 +162,5 @@ def draw():
 	return r
 
 if __name__ == "__main__":
-	app.run()
+	port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)

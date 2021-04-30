@@ -46,7 +46,7 @@ def register(account, password):
 		uid = m.hexdigest()
 
 		accountData = {"bethistory":[],
-						"currentAmount":0,
+						"currentAmount":1000,
 						"name": account}
 
 		f = open("data/account/{}.json".format(uid),"w")

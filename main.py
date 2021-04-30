@@ -3,7 +3,7 @@ from game import Game
 from login import _login, register
 from account import readAccountData, bet_ac
 from constant import *
-
+# Hi
 app = Flask(__name__)
 G = Game()
 

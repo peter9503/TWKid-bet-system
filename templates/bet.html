@@ -39,6 +39,10 @@
 
 
 <body>
+您的餘額：<br><br>
+遊戲規則：<br>
+一張票價值100點，請自由下注，賠率會隨著所有人的下注浮動，最後的獲利會依照最終賠率來決定。<br><br>
+
 可下注的遊戲列表<p></p>
 <input class="text" value = "{{ uid }}" id = "uid" hidden>
 <form method = "post" action = "{{ url_for('bet') }}" >	
@@ -48,14 +52,14 @@
         <div style="display:inline; width: 200px">{{ game['p1'] }}</div>
         <div style="display:inline; width: 100px">當前賠率：{{ game['p1Ratio'] }}</div>
         <br>
-        <input class="text" id = "ticket_left_{{ game['gid'] }}" value="0" style="display:inline; width: 50px">張
+        下注<input class="text" id = "ticket_left_{{ game['gid'] }}" value="0" style="display:inline; width: 50px">張(一張價值100點)
         <input type="button" value = "下注" onclick="place_bet_0(this.id,'{{ game['p1'] }}')" id = "{{ game['gid'] }}" style="display:inline; width: 50px">
         <br>
 
         <div style="display:inline; width: 200px">{{ game['p2'] }}</div>
         <div style="display:inline; width: 100px">當前賠率：{{ game['p2Ratio'] }}</div>
         <br>
-        <input class="text" id = "ticket_right_{{ game['gid'] }}" value="0" style="display:inline; width: 50px">張
+        下注<input class="text" id = "ticket_right_{{ game['gid'] }}" value="0" style="display:inline; width: 50px">張(一張價值100點)
         <input type="button" value = "下注" onclick="place_bet_1(this.id,'{{ game['p2'] }}')" id = "{{ game['gid'] }}" style="display:inline; width: 50px">
         <br><br><br>
     {% endfor %}

@@ -93,7 +93,10 @@ function sendMoney() {
 uid：<input class="text" id = "send_money_uid"><br>
 數量：<input class="text" id = "send_money_amount"><br>
 <input type="button" value = "我叫你發" onclick="sendMoney()">
+<br><br>
 
+
+state 0是開放下注，1是關盤未結算，2是關盤並結算過了
 {% for game in gameData %}
     <p>
     {{ game['title'] }}
@@ -103,6 +106,7 @@ uid：<input class="text" id = "send_money_uid"><br>
     <input type="button" value = "{{ game['p2'] }}獲勝" onclick="draw(this.id,'{{ game['p2'] }}')" id = "{{ game['gid'] }}" style="display:inline;">
     </p>
 {% endfor %}
+<br><br>
 
 <form method = "post" action = "{{ url_for('manager') }}" >
     <input type="text" name="account" value = "manager" hidden>

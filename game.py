@@ -11,7 +11,7 @@ class Game():
 		self.loadAllRunningGames()
 
 
-	def newGame(self,title,options):
+	def newGame(self,title,teamNames):
 		# create new game file
 		gameData = {"title":title,
 					"startTime":time.asctime( time.localtime(time.time()) ),
@@ -183,7 +183,6 @@ class Game():
 					if side == winner:
 						winnerAmount += sum(data["betData"][side][uid])
 
-			ratio = 0
 			if winnerAmount != 0:
 				ratio = round(totalAmount*1.0/winnerAmount,2)*0.98
 

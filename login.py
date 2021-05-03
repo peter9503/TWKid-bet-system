@@ -58,10 +58,19 @@ def register(account, password):
 		f.close()
 		return SUCCESS
 
+def caculateUid(account,password):
+	m = hashlib.sha256()
+	m.update(account.encode())
+	m.update(password.encode())
+	m.update(m.hexdigest().encode())
+	uid = m.hexdigest()
+	return uid
 
 
 if __name__ == '__main__':
 	# print(login("我","tp"))
-	print(register("我","123"))
+	account = input()
+	password = input()
+	print(caculateUid(account,password))
 
 

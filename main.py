@@ -166,7 +166,7 @@ def draw():
 @app.route("/send_money", methods=["POST"])
 def send_money():
 	uid = request.form["uid"]
-	amount = request.form["amount"]
+	amount = int(request.form["amount"])
 	r = sendMoney(uid,amount)
 	return "SUCCESS"
 

@@ -1,7 +1,7 @@
 from flask import Flask, render_template, Response, request, redirect, url_for 
 from game import Game
 from login import _login, register
-from account import readAccountData, bet_ac, sendMoney
+from account import readAccountData, bet_ac, sendMoney, readAccountBalance
 from constant import *
 
 import os
@@ -80,7 +80,8 @@ def bet():
 		gameData.append(g)
 
 	print(gameData)
-	return render_template('bet.html', CurrentGames = gameData, uid = request.form["uid"])
+	b = readAccountBalance(request.form["uid"])
+	return render_template('bet.html', CurrentGames = gameData, uid = request.form["uid"], balance = b)
 
 @app.route("/settle_bet", methods=["POST"])
 def settle_bet():

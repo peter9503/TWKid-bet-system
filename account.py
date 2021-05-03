@@ -12,6 +12,9 @@ def readAccountData(uid):
 	f.close()
 	return Data
 
+def readAccountBalance(uid):
+	return readAccountData(uid)["currentAmount"]
+
 def sendMoney(uid,amount):
 	if not os.path.exists("data/account/{}.json".format(uid)):
 		print("account sendMoney() got wrong uid WTF")

@@ -1,7 +1,7 @@
 from flask import Flask, render_template, Response, request, redirect, url_for 
 from game import Game
 from login import _login, register
-from account import readAccountData, bet_ac
+from account import readAccountData, bet_ac, sendMoney
 from constant import *
 
 import os
@@ -26,11 +26,9 @@ def index():
 
 
 	if userUid == WRONG_ACCOUNT:
-		# TODO
 		return "帳號錯誤"
 
 	elif userUid == WRONG_PW:
-		# TODO
 		return "密碼錯誤"
 
 	else:
@@ -163,6 +161,14 @@ def draw():
 	winner = request.form["winner"]
 	r = G.draw(gid,winner)
 	return r
+
+@app.route("/send_money", methods=["POST"])
+def send_money():
+	uid = request.form["uid"]
+	amount = request.form["amount"]
+	r = sendMoney(uid,amount)
+	return "SUCCESS"
+
 
 if __name__ == "__main__":
 	port = int(os.environ.get('PORT', 5000))

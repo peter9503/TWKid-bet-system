@@ -61,17 +61,38 @@ function newAccount() {
     );
 }
 
+function sendMoney() {  
+    $.ajax(
+        {
+            type: "POST",
+            url: "send_money",          
+            data: {uid:document.getElementById("send_money_uid").value,
+                    amount:document.getElementById("send_money_amount").value},
+        }
+    ).done(
+        function(msg){
+            alert(msg);
+        }
+    );
+}
 
 </script> 
 <html>
+新增比賽<br>
 比賽名稱：<input class="text" id = "game_title"> <br>
 隊伍1簡稱：<input class="text" id = "name1"><br>
 隊伍2簡稱：<input class="text" id = "name2"><br>
 <input type="button" value = "建立" onclick="set_new_game()">
 <br><br><br>
+建立帳號<br>
 帳號：<input class="text" id = "ac"><br>
 密碼：<input class="text" id = "pw"><br>
 <input type="button" value = "建立" onclick="newAccount()">
+<br><br><br>
+直接發錢<br>
+uid：<input class="text" id = "send_money_uid"><br>
+數量：<input class="text" id = "send_money_amount"><br>
+<input type="button" value = "我叫你發" onclick="sendMoney()">
 
 {% for game in gameData %}
     <p>

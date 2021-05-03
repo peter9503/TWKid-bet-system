@@ -3,8 +3,6 @@ import os
 from constant import *
 
 
-
-
 def readAccountData(uid):
 	if not os.path.exists("data/account/{}.json".format(uid)):
 		return WRONG_ACCOUNT

@@ -118,6 +118,10 @@ state 0是開放下注，1是關盤未結算，2是關盤並結算過了
     <input type="submit" value="登出" />
 </form>
 
+<form method = "GET" action = "{{ url_for('download') }}" >
+    <input type="submit" value = "按我備份">
+</form><p>
+
 
 </body>
 </html>

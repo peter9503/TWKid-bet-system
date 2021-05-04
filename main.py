@@ -1,7 +1,7 @@
 from flask import Flask, render_template, Response, request, redirect, url_for 
 from game import Game
 from login import _login, register
-from account import readAccountData, bet_ac, sendMoney, readAccountBalance
+from account import readAccountData, bet_ac, sendMoney, readAccountBalance, allaccount
 from constant import *
 
 import os
@@ -43,20 +43,20 @@ def bet():
 	gameData = []
 	allGames = G.allRunningGames()
 	for game in allGames:
-		players = []
+		# players = []
 
-		for p in allGames[game]["betData"]:
-			players.append(p)
+		# for p in allGames[game]["betData"]:
+		# 	players.append(p)
 
-		p1Total = 0
-		p2Total = 0
+		p1Total = allGames[game]["p1Amount"]
+		p2Total = allGames[game]["p2Amount"]
 
 
-		for u in allGames[game]["betData"][players[0]]:
-			p1Total += sum(allGames[game]["betData"][players[0]][u])
+		# for u in allGames[game]["betData"][players[0]]:
+		# 	p1Total += sum(allGames[game]["betData"][players[0]][u])
 
-		for u in allGames[game]["betData"][players[1]]:
-			p2Total += sum(allGames[game]["betData"][players[1]][u])
+		# for u in allGames[game]["betData"][players[1]]:
+		# 	p2Total += sum(allGames[game]["betData"][players[1]][u])
 
 		print(p1Total,p2Total)
 		if p1Total == 0:
@@ -70,11 +70,10 @@ def bet():
 			p2Ratio = round((p1Total+p2Total)/p2Total*0.98,2)
 
 
-		g = {"gid":game[:-5],
+		g = {"gid":game,
 			"title":allGames[game]["title"],
-			"p1":players[0],
-			"p2":players[1],
-			"state":allGames[game]["state"],
+			"p1":allGames[game]["p1Names"],
+			"p2":allGames[game]["p2Names"],
 			"p1Ratio":p1Ratio,
 			"p2Ratio":p2Ratio}
 		gameData.append(g)
@@ -89,15 +88,15 @@ def settle_bet():
 		totalCost =  int(request.form["num"])
 	except:
 		return "請輸入數字"
-	print(request.form)
-	accountResult = bet_ac(uid = request.form["uid"], gid = request.form["gid"], amount = totalCost*100)
+	accountResult = bet_ac(uuid = request.form["uid"], gid = request.form["gid"], amount = totalCost*100)
 	if accountResult == WRONG_ACCOUNT:
 		return "WRONG_ACCOUNT"
 
 	elif accountResult == INSUFFICIENT:
 		return "餘額不足"
 
-	G.bet(gid =  request.form["gid"], uid = request.form["uid"], amount = int(request.form["num"])*100, side = request.form["side"])
+	print("{} bet on {} with {}".format(request.form["uid"], request.form["side"], int(request.form["num"])*100))
+	G.bet(gid = request.form["gid"], uuid = request.form["uid"], amount = int(request.form["num"])*100, side = request.form["side"])
 
 	return "下注成功"
 
@@ -115,6 +114,7 @@ def new_game():
 def new_account():
 	ac = request.form["ac"]
 	pw = request.form["pw"]
+	print("new account：")
 	print(ac)
 	print(pw)
 	r = register(ac,pw)
@@ -128,8 +128,6 @@ def new_account():
 @app.route("/manager", methods=["POST"])
 def manager():
 	print(request.form['account'],request.form['pw'])
-	print(request.form['account'] != "manager")
-	print(request.form['pw'] != "qwerasdf")
 	if request.form['account'] != "manager" or request.form['pw'] != "qwerasdf":
 		return "Fuck off !!!!!"
 
@@ -137,16 +135,15 @@ def manager():
 	print("all games:")
 	gameData = []
 	for game in allGames:
-		players = []
-		for p in allGames[game]["betData"]:
-			players.append(p)
-		g = {"gid":game[:-5],
+
+		g = {"gid":game,
 			"title":allGames[game]["title"],
-			"p1":players[0],
-			"p2":players[1],
+			"p1":allGames[game]["p1Names"],
+			"p2":allGames[game]["p2Names"],
 			"state":allGames[game]["state"],}
 		gameData.append(g)
-	print(gameData)
+		print(g)
+	# print(gameData)
 	return render_template('manager.html',gameData = gameData)
 
 
@@ -169,6 +166,33 @@ def send_money():
 	amount = int(request.form["amount"])
 	r = sendMoney(uid,amount)
 	return "SUCCESS"
+
+@app.route("/all_account", methods=["GET"])
+def all_account():
+	o = allaccount()
+	output = "(uid, uuid, currentAmount, name)\n"
+	for oo in o:
+		output += str(oo)
+		output += "\n"
+	return output
+
+@app.route("/all_bet", methods=["GET"])
+def all_bet():
+	o = G._allb()
+	output = "(bid, uid, gid, amount, side)<br>"
+	for oo in o:
+		output += str(oo)
+		output += "<br>"
+	return output
+
+@app.route("/all_games", methods=["GET"])
+def all_games():
+	o = G._allg()
+	output = "(gid, title, startTime, endTime, state, winner, ratio, sideA, sideB)<br>"
+	for oo in o:
+		output += str(oo)
+		output += "<br>"
+	return output
 
 
 if __name__ == "__main__":

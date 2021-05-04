@@ -3,22 +3,15 @@ import time
 import hashlib
 import os
 from constant import *
+from sqliteControl import updateById, createRow, readSQ
+from share import findAccount
 
-
-def findId(account):
-	f = open("data/account/idTable.txt","r")
-	for line in f:
-		if account == line[:-1]:
-			f.close()
-			return True
-	f.close()
-	return False
 
 
 def _login(account, password):
 
 	# check account ID valid
-	if not findId(account):
+	if not findAccount(account):
 		return WRONG_ACCOUNT
 
 	# set up hashed uid
@@ -26,16 +19,17 @@ def _login(account, password):
 	m.update(account.encode())
 	m.update(password.encode())
 	m.update(m.hexdigest().encode())
-	uid = m.hexdigest()
+	uuid = m.hexdigest()
 
-	if not os.path.exists("data/account/{}.json".format(uid)):
+	accountData = readSQ("users","name",account)[0]
+	if accountData[1] != uuid:
 		return WRONG_PW
 
-	return uid
+	return uuid
 
 
 def register(account, password):
-	if findId(account):
+	if findAccount(account):
 		return NAME_USED
 
 	else:
@@ -43,19 +37,14 @@ def register(account, password):
 		m.update(account.encode())
 		m.update(password.encode())
 		m.update(m.hexdigest().encode())
-		uid = m.hexdigest()
+		uuid = m.hexdigest()
 
-		accountData = {"bethistory":[],
-						"currentAmount":2000,
-						"name": account}
+		accountData = {	"currentAmount":2000,
+						"name": account,
+						"uuid":uuid}
 
-		f = open("data/account/{}.json".format(uid),"w")
-		f.write(json.dumps(accountData))
-		f.close()
+		createRow("users",accountData)
 
-		f = open("data/account/idTable.txt","a")
-		f.write(account + "\n")
-		f.close()
 		return SUCCESS
 
 def caculateUid(account,password):
@@ -68,9 +57,4 @@ def caculateUid(account,password):
 
 
 if __name__ == '__main__':
-	# print(login("我","tp"))
-	account = input()
-	password = input()
-	print(caculateUid(account,password))
-
-
+	print(_login("test","test"))

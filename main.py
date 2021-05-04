@@ -178,7 +178,7 @@ def all_account():
 
 
 @app.route('/download')
-def downloadFile ():
+def download ():
     #For windows you need to use drive name [ex: F:/Example.pdf]
     path = "data.db"
     return send_file(path, as_attachment=True)

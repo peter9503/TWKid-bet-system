@@ -104,6 +104,6 @@ venv.bak/
 .mypy_cache/
 
 
-# data/account/
+data/account/
 data/games/
 fastPush.sh

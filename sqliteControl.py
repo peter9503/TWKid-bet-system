@@ -1,7 +1,7 @@
 import sqlite3
 
 TEST = False
-con = sqlite3.connect('static/test.db',check_same_thread=False)
+con = sqlite3.connect('data.db',check_same_thread=False)
 cur = con.cursor()
 
 def dict_factory(cursor, row):

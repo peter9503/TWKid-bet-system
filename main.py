@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Response, request, redirect, url_for 
+from flask import Flask, render_template, Response, request, redirect, url_for, send_file
 from game import Game
 from login import _login, register
 from account import readAccountData, bet_ac, sendMoney, readAccountBalance, allaccount
@@ -175,6 +175,14 @@ def all_account():
 		output += str(oo)
 		output += "\n"
 	return output
+
+
+@app.route('/download')
+def downloadFile ():
+    #For windows you need to use drive name [ex: F:/Example.pdf]
+    path = "data.db"
+    return send_file(path, as_attachment=True)
+
 
 @app.route("/all_bet", methods=["GET"])
 def all_bet():

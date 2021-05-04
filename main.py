@@ -170,10 +170,10 @@ def send_money():
 @app.route("/all_account", methods=["GET"])
 def all_account():
 	o = allaccount()
-	output = "(uid, uuid, currentAmount, name)\n"
+	output = "(uid, uuid, currentAmount, name)<br>"
 	for oo in o:
 		output += str(oo)
-		output += "\n"
+		output += "<br>"
 	return output
 
 

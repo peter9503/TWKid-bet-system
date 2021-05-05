@@ -76,6 +76,11 @@ def readAll(tableName):
 	cur.execute("SELECT * FROM {}".format(tableName))
 	return cur.fetchall()
 
+def _download():
+	con.close()
+	con = sqlite3.connect('data.db',check_same_thread=False)
+	cur = con.cursor()
+
 if __name__ == '__main__':
 	print(init())
 	# if TEST:

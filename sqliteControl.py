@@ -1,4 +1,5 @@
 import sqlite3
+from ast import literal_eval
 
 TEST = False
 con = sqlite3.connect('data.db',check_same_thread=False)
@@ -81,8 +82,27 @@ def _download():
 	con = sqlite3.connect('data.db',check_same_thread=False)
 	cur = con.cursor()
 
+
+def init_from_accountData():
+	# init()
+	con_ = sqlite3.connect('data_.db',check_same_thread=False)
+	cur_ = con_.cursor()
+	cur_.execute('''CREATE TABLE users (uid int, uuid text, currentAmount int, name text)''')
+	cur_.execute('''CREATE TABLE bethistory (bid int, uid int, gid int, amount int, side text)''')
+	cur_.execute('''CREATE TABLE games (gid int, title text, startTime text, endTime text, state int, winner text, ratio real, sideA text, sideB text)''')
+	con_.commit()
+
+	f = open("data.txt")
+	for line in f:
+		print(line[:-1])
+		con_.execute("INSERT INTO users (uid, uuid, currentAmount, name) VALUES {}".format(line[:-1]))
+		con_.commit()
+	con_.close()
+
+
+
 if __name__ == '__main__':
-	print(init())
+	print(init_from_accountData())
 	# if TEST:
 	# 	print(createRow("users",{"uuid":"qwfd","currentAmount":1,"name":"werf"}))
 	# 	print(readSQ("users","name","werf"))

@@ -4,6 +4,7 @@ from login import _login, register
 from account import readAccountData, bet_ac, sendMoney, readAccountBalance, allaccount
 from constant import *
 
+
 import os
 # Hi
 app = Flask(__name__)

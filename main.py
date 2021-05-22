@@ -89,6 +89,10 @@ def settle_bet():
 		totalCost =  int(request.form["num"])
 	except:
 		return "請輸入數字"
+	if totalCost < 0:
+		print("金融犯 {}".format(request.form["uid"]))
+		return "還敢當金融犯啊"
+
 	accountResult = bet_ac(uuid = request.form["uid"], gid = request.form["gid"], amount = totalCost*100)
 	if accountResult == WRONG_ACCOUNT:
 		return "WRONG_ACCOUNT"

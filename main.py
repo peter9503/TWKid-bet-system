@@ -17,6 +17,7 @@ def login():
 
 @app.route("/index",  methods=['POST'])
 def index():
+	# need account and password to go into this page(index), otherwise get err msg
 	print(G.allRunningGames())
 	print(request.form)
 	if "account" in request.form:
@@ -41,23 +42,12 @@ def index():
 
 @app.route("/bet", methods=["POST"])
 def bet():
+	# read and show all running games when goes into this page, can't update dynamically, so need to refresh the page
 	gameData = []
 	allGames = G.allRunningGames()
 	for game in allGames:
-		# players = []
-
-		# for p in allGames[game]["betData"]:
-		# 	players.append(p)
-
 		p1Total = allGames[game]["p1Amount"]
 		p2Total = allGames[game]["p2Amount"]
-
-
-		# for u in allGames[game]["betData"][players[0]]:
-		# 	p1Total += sum(allGames[game]["betData"][players[0]][u])
-
-		# for u in allGames[game]["betData"][players[1]]:
-		# 	p2Total += sum(allGames[game]["betData"][players[1]][u])
 
 		print(p1Total,p2Total)
 		if p1Total == 0:
@@ -85,6 +75,7 @@ def bet():
 
 @app.route("/settle_bet", methods=["POST"])
 def settle_bet():
+	# call this to settle a bet
 	try:
 		totalCost =  int(request.form["num"])
 	except:
@@ -107,6 +98,7 @@ def settle_bet():
 
 @app.route("/new_game", methods=["POST"])
 def new_game():
+	# create new game
 	title = request.form["title"]
 	names = [request.form["n1"],request.form["n2"]]
 	print(title)
@@ -117,6 +109,7 @@ def new_game():
 
 @app.route("/new_account", methods=["POST"])
 def new_account():
+	# create new account
 	ac = request.form["ac"]
 	pw = request.form["pw"]
 	print("new account：")
@@ -132,7 +125,10 @@ def new_account():
 
 @app.route("/manager", methods=["POST"])
 def manager():
+	# login manager page
 	print(request.form['account'],request.form['pw'])
+
+	# Manager account and password are HARDCODE here
 	if request.form['account'] != "manager" or request.form['pw'] != "qwerasdf":
 		return "Fuck off !!!!!"
 
@@ -148,7 +144,6 @@ def manager():
 			"state":allGames[game]["state"],}
 		gameData.append(g)
 		print(g)
-	# print(gameData)
 	return render_template('manager.html',gameData = gameData)
 
 
@@ -174,6 +169,7 @@ def send_money():
 
 @app.route("/all_account", methods=["GET"])
 def all_account():
+	# get inner data
 	o = allaccount()
 	output = "(uid, uuid, currentAmount, name)<br>"
 	for oo in o:
@@ -182,15 +178,9 @@ def all_account():
 	return output
 
 
-@app.route('/download')
-def download ():
-    #For windows you need to use drive name [ex: F:/Example.pdf]
-    path = "data.db"
-    return send_file(path, as_attachment=True)
-
-
 @app.route("/all_bet", methods=["GET"])
 def all_bet():
+	# get inner data
 	o = G._allb()
 	output = "(bid, uid, gid, amount, side)<br>"
 	for oo in o:
@@ -200,6 +190,7 @@ def all_bet():
 
 @app.route("/all_games", methods=["GET"])
 def all_games():
+	# get inner data
 	o = G._allg()
 	output = "(gid, title, startTime, endTime, state, winner, ratio, sideA, sideB)<br>"
 	for oo in o:
@@ -207,7 +198,13 @@ def all_games():
 		output += "<br>"
 	return output
 
+@app.route('/download')
+def download ():
+    #For windows you need to use drive name [ex: F:/Example.pdf]
+    path = "data.db"
+    return send_file(path, as_attachment=True)
+
 
 if __name__ == "__main__":
 	port = int(os.environ.get('PORT', 5000))
-	app.run(host='0.0.0.0', port=port)
+	app.run(host='127.0.0.1', port=port)

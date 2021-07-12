@@ -28,25 +28,9 @@ class Game():
 					"sideB":teamNames[1],
 					"state":0}
 
-		# gid = tableSize("games")
-
-		# # count current gid
-		# try:
-		# 	gid = len(os.listdir("data/games"))
-		# except:
-		# 	gid = 0
 
 		gid = createRow("games",gameData)
 
-		# # write file
-		# try:
-		# 	f = open("data/games/{}.json".format(gid),"w")
-		# except:
-		# 	os.mkdir("data/games")
-		# 	f = open("data/games/{}.json".format(gid),"w")
-
-		# f.write(json.dumps(gameData))
-		# f.close()
 		print("create game {}".format(gid))
 		print(gameData)
 		return 'SUCCESS'
@@ -75,13 +59,6 @@ class Game():
 				print("這裡有點問題!!!!")
 				print(game)
 
-		# f = open("data/account/{}.json".format(uid))
-		# data = json.loads(f.readline())
-		# f.close()
-
-		# for gid in data["bethistory"]:
-		# 	output.extend(self.loadBetByUidAndGid(uid,gid))
-
 		return output
 
 	def loadGameByGid(self,gid):
@@ -92,7 +69,7 @@ class Game():
 		output = dict(zip_iterator)
 		return output
 
-	# def loadBetByUidAndGid(self,uid,gid):
+	def loadBetByUidAndGid(self,uid,gid):
 		output = []
 		if not os.path.exists("data/games/{}.json".format(gid)):
 			print("Game.loadBetByUidAndGid() got wrong gid WTF")
@@ -141,20 +118,9 @@ class Game():
 			print(o)		
 
 		return output		
-		# try:
-		# 	allFileList = os.listdir("data/games")
-		# 	for gid in allFileList:
-		# 		f = open("data/games/{}".format(gid))
-		# 		data = json.loads(f.readline())
-		# 		f.close()
-		# 		output[gid] = data
-		# 	return output
-
-		# except:
-		# 	return output
 
 	def allRunningGames(self):
-		# return current availabe game
+		# return all games that are available for betting
 		# SQLite
 		output = {}
 		games = readSQ("games","state",0)
@@ -172,29 +138,11 @@ class Game():
 			output[g[0]] = o
 		return output
 
-		# try:
-		# 	allFileList = os.listdir("data/games")
-		# 	for gid in allFileList:
-		# 		f = open("data/games/{}".format(gid))
-		# 		data = json.loads(f.readline())
-		# 		f.close()
-
-		# 		if data["state"] == 0:
-		# 			output[gid] = data
-
-		# 	return output
-
-		# except:
-		# 	return {}
-		
 
 	def endBet(self,gid):
 		# read and write
 		# SQLite
 
-		# if not os.path.exists("data/games/{}.json".format(gid)):
-		# 	print("Game.endBet() got wrong gid WTF")
-		# 	return
 		if len(readSQ("games","gid",gid)) == 0:
 			print("Game.endBet() got wrong gid WTF")
 			return "Wrong gid"
@@ -206,19 +154,6 @@ class Game():
 		else:
 			return "endBet with wrong state, please check"
 
-		# f = open("data/games/{}.json".format(gid))
-		# data = json.loads(f.readline())
-		# f.close()
-		# if data["state"] == 0:
-		# 	data["state"] += 1
-
-		# 	f = open("data/games/{}.json".format(gid),"w")
-		# 	f.write(json.dumps(data))
-		# 	f.close()
-		# 	return "SUCCESS"
-
-		# else:
-		# 	return "endBet with wrong state, please check"
 
 	def bet(self, gid, uuid, amount, side):
 		# only add data for games
@@ -226,22 +161,7 @@ class Game():
 		uid = readAccountData(uuid)["uid"]
 		createRow("bethistory",{"gid":gid,"uid":uid,"side":side,"amount":amount})
 		return
-		# f = open("data/games/{}.json".format(gid))
-		# data = json.loads(f.readline())
-		# f.close()
 
-		# uid = str(uid)
-
-		# if uid not in data["betData"][side]:
-		# 	data["betData"][side][uid] = [amount]
-
-		# else:
-		# 	data["betData"][side][uid].append(amount)
-
-
-		# f = open("data/games/{}.json".format(gid),"w")
-		# f.write(json.dumps(data))
-		# f.close()		
 
 	def draw(self, gid, winner):
 		# calculate the game result and send money to those we win
@@ -282,39 +202,6 @@ class Game():
 
 			return "SUCCESS"
 
-		# f = open("data/games/{}.json".format(gid))
-		# data = json.loads(f.readline())
-		# f.close()
-
-		# if data["state"] != 1:
-		# 	return "draw with wrong state"
-			
-		# else:
-			# data["state"] += 1
-
-			# totalAmount = 0
-			# winnerAmount = 0
-			# for side in data["betData"]:
-			# 	for uid in data["betData"][side]:
-			# 		totalAmount += sum(data["betData"][side][uid])
-			# 		if side == winner:
-			# 			winnerAmount += sum(data["betData"][side][uid])
-
-			# if winnerAmount != 0:
-			# 	ratio = round(totalAmount*1.0/winnerAmount,2)*0.98
-
-
-			# 	for uid in data["betData"][winner]:
-			# 		betAmount = sum(data["betData"][winner][uid])
-			# 		gain = int(betAmount*ratio)
-			# 		sendMoney(uid,gain)
-
-			# data["endTime"] = time.asctime( time.localtime(time.time()))
-			# data["winner"] = winner
-			# data["ratio"] = ratio
-			# f = open("data/games/{}.json".format(gid),"w")
-			# f.write(json.dumps(data))
-			# f.close()
 
 
 

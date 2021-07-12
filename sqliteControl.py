@@ -5,6 +5,8 @@ TEST = False
 con = sqlite3.connect('data.db',check_same_thread=False)
 cur = con.cursor()
 
+# Here are some tools I write to use sqlite in python.
+
 def dict_factory(cursor, row):
     d = {}
     for idx, col in enumerate(cursor.description):
@@ -12,9 +14,7 @@ def dict_factory(cursor, row):
     return d
 
 
-def init():
-	# con = sqlite3.connect('test.db')
-	# cur = con.cursor()	
+def init():	
 	try:
 		cur.execute('''CREATE TABLE users (uid int, uuid text, currentAmount int, name text)''')
 		cur.execute('''CREATE TABLE bethistory (bid int, uid int, gid int, amount int, side text)''')
@@ -27,8 +27,6 @@ def init():
 
 
 def tableSize(tableName):
-	# con = sqlite3.connect('test.db')
-	# cur = con.cursor()
 	a = cur.execute('''select count(*) from {}'''.format(tableName)).fetchall()
 	return a[0][0]
 
@@ -38,15 +36,9 @@ def updateById(tableName, data, _id, flag = False):
 	con.commit()
 	return
 
-# def update(tableName, key, value, data):
-# 	for d in data:
-# 		cur.execute("UPDATE {} SET {}=? WHERE {}=?".format(tableName,d,key),[data[d]],value)
-# 	con.commit()
-# 	return
+
 
 def createRow(tableName, data):
-	# con = sqlite3.connect('test.db')
-	# cur = con.cursor()
 	new_id = tableSize(tableName)
 
 	# create new one
@@ -56,6 +48,7 @@ def createRow(tableName, data):
 	return new_id
 
 def readColumnName(tableName):
+	# read all column names with specific table name
 	a = cur.execute('''PRAGMA table_info({})'''.format(tableName))
 	a = a.fetchall()
 	output = []
@@ -64,27 +57,28 @@ def readColumnName(tableName):
 	return output
 
 def readSQ(tableName,key,value):
-	# con = sqlite3.connect('test.db')
-	# cur = con.cursor()
+	# read with specific key and value
 	con.row_factory = dict_factory
 	cur.execute("SELECT * FROM {} WHERE {} = ?".format(tableName,key),[value])
 	return cur.fetchall()
 
 def readAll(tableName):
-	# con = sqlite3.connect('test.db')
-	# cur = con.cursor()
+	# read the whole table
 	con.row_factory = dict_factory
 	cur.execute("SELECT * FROM {}".format(tableName))
 	return cur.fetchall()
 
 def _download():
+	# now sure if it works
 	con.close()
 	con = sqlite3.connect('data.db',check_same_thread=False)
 	cur = con.cursor()
 
 
 def init_from_accountData():
-	# init()
+	# init
+	# need to work with data.txt in the right form
+	# can do manual update to our db
 	con_ = sqlite3.connect('data_.db',check_same_thread=False)
 	cur_ = con_.cursor()
 	cur_.execute('''CREATE TABLE users (uid int, uuid text, currentAmount int, name text)''')
@@ -103,8 +97,3 @@ def init_from_accountData():
 
 if __name__ == '__main__':
 	print(init_from_accountData())
-	# if TEST:
-	# 	print(createRow("users",{"uuid":"qwfd","currentAmount":1,"name":"werf"}))
-	# 	print(readSQ("users","name","werf"))
-	# 	print(updateById("users",{"currentAmount":10}, 0))
-	# print(readColumnName("users"))
